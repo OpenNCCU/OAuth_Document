@@ -12,7 +12,7 @@
   應用程式的用戶端 ID。
 - redirect_uri:
   決定 API 伺服器在使用者完成授權流程後將使用者重新導向的位置。
-- response_type: `code`, `token`
+- response_type: `code`
 - scope: 多個 scope 用`,`分隔
   - `email`: 電子郵件
   - `profile`: 基本資料
