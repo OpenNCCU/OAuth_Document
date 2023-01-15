@@ -14,10 +14,18 @@
   決定 API 伺服器在使用者完成授權流程後將使用者重新導向的位置。
 - response_type: `code`
 - scope: 多個 scope 用`,`分隔
-  - `email`: 電子郵件
-  - `profile`: 基本資料
-  - `dept`: 學系、入學年
-  - `inccu`: 辣個 json
+  - profile: "個人資料",
+  - dept: "系所、入學年",
+  - email: "電子郵件",
+  - inccu: "iNCCU全人資訊",
+  - inccu_basic_profile: "iNCCU個人資料 (學號)",
+  - inccu_school_roll: "iNCCU學籍資料",
+  - inccu_course_score: "iNCCU修業成績",
+  - inccu_course_record: "iNCCU修課紀錄、成績",
+  - inccu_capabillity: "iNCCU校內活動、能力展現",
+  - inccu_healthy: "iNCCU全人健康資訊",
+  - inccu_honors: "iNCCU全人榮譽資料（操行成績等）",
+  - inccu_resume: "iNCCU全人履歷資料",
 
 ### 建議使用
 
@@ -130,8 +138,19 @@ Host: oauth.opennccu.com
 Authorization: Bearer [您的 access_token]
 ```
 
+如果授權被用戶在Open NCCU取消，該個key會寫`"unauthorized"`
+例如
+```json
+{
+  "email": "xxxxx@gmail.com",
+  "inccu": "unauthorized"
+}
+```
 ---
 
 # 使用 refresh_token 更新 access_token
 
 等待更新
+
+---
+
