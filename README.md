@@ -17,15 +17,15 @@
   - profile: "個人資料",
   - dept: "系所、入學年",
   - email: "電子郵件",
-  - inccu: "iNCCU全人資訊",
-  - inccu_basic_profile: "iNCCU個人資料 (學號)",
-  - inccu_school_roll: "iNCCU學籍資料",
-  - inccu_course_score: "iNCCU修業成績",
-  - inccu_course_record: "iNCCU修課紀錄、成績",
-  - inccu_capabillity: "iNCCU校內活動、能力展現",
-  - inccu_healthy: "iNCCU全人健康資訊",
-  - inccu_honors: "iNCCU全人榮譽資料（操行成績等）",
-  - inccu_resume: "iNCCU全人履歷資料",
+  - inccu: "iNCCU 全人資訊",
+  - inccu_basic_profile: "iNCCU 個人資料 (學號)",
+  - inccu_school_roll: "iNCCU 學籍資料",
+  - inccu_course_score: "iNCCU 修業成績",
+  - inccu_course_record: "iNCCU 修課紀錄、成績",
+  - inccu_capabillity: "iNCCU 校內活動、能力展現",
+  - inccu_healthy: "iNCCU 全人健康資訊",
+  - inccu_honors: "iNCCU 全人榮譽資料（操行成績等）",
+  - inccu_resume: "iNCCU 全人履歷資料",
 
 ### 建議使用
 
@@ -100,7 +100,7 @@ code=[先前回傳的code]&
 client_id=[your_client_id]&
 client_secret=[your_client_secret]&
 redirect_uri=[https%3A//oauth2.example.com/code]&
-grant_type=[authorization_code]
+grant_type=authorization_code
 ```
 
 回傳的 JSON 會包含下列資訊：
@@ -138,19 +138,72 @@ Host: oauth.opennccu.com
 Authorization: Bearer [您的 access_token]
 ```
 
-如果授權被用戶在Open NCCU取消，該個key會寫`"unauthorized"`
+如果授權被用戶在 Open NCCU 取消，該個 key 會寫`"unauthorized"`
 例如
+
 ```json
 {
   "email": "xxxxx@gmail.com",
   "inccu": "unauthorized"
 }
 ```
+
 ---
 
 # 使用 refresh_token 更新 access_token
 
-等待更新
+請呼叫 https://oauth.opennccu.com/token 並帶上以下
+
+- Content-Type: `application/x-www-form-urlencoded`
+- body
+  - client_id:
+    應用程式的用戶端 ID。
+  - client_secret:
+    應用程式的用戶端密碼。
+  - code:
+    步驟 4 中取得的授權碼。
+  - grant_type:
+    `authorization_code`
+  - redirect_uri:
+    先前步驟中使用的網址。
+
+範例：
+
+```
+[xxx]表示這是一個變數，需要自行填入
+POST /token HTTP/1.1
+Host: oauth.opennccu.com
+Content-Type: application/x-www-form-urlencoded
+
+client_id=[your_client_id]&
+client_secret=[your_client_secret]&
+refresh_token=[refresh_token]&
+grant_type=refresh_token
+```
+
+回傳的 JSON 會包含下列資訊：
+
+- access_token: 用來取得資料的 token，有效期限 1 小時
+- expires_in: 有效期限，單位秒
+- scope: 權限，以空白分隔
+- token_type: `Bearer`
+
+範例：
+
+```json
+{
+  "access_token": "54f91e3551c7c88fc1c9461ecd27267686ad9e19a7d52a784d51d41f2cc143b9",
+  "expires_in": 3600,
+  "token_type": "Bearer",
+  "scope": "profile dept"
+}
+```
 
 ---
 
+# 其他附註
+
+1. auth_code 只能使用一次，使用後會失效
+2. refresh_token 只能使用一次，使用後會失效
+3. access_token 有效期限為 1 小時，過期後請使用 refresh_token 更新
+4. refresh_token 有效期限為 30 天，每次更新 access_token 都會更新 refresh_token 的有效期限
